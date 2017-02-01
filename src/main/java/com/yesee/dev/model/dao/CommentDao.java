@@ -56,6 +56,13 @@ public class CommentDao {
 		query.setParameter(0, id);
 		query.executeUpdate();
 	}
+	
+	@Transactional(readOnly = false)
+	public void deleteCommentsByArticleId(Integer id){
+		Query query = getSessionFactory().getCurrentSession().createQuery("delete from Comment a where a.article_id =?");
+		query.setParameter(0, id);
+		query.executeUpdate();
+	}
 
 	@Transactional(readOnly = false)
 	public void addComment(Comment comment){

@@ -1,8 +1,6 @@
 package com.yesee.dev.web.controller;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +21,7 @@ import com.yesee.dev.model.ArticleVO;
 import com.yesee.dev.model.bean.Article;
 import com.yesee.dev.model.bean.UserInfo;
 import com.yesee.dev.model.service.ArticleService;
+import com.yesee.dev.model.service.CommentService;
 import com.yesee.dev.model.service.UserInfoService;
 
 @Controller
@@ -33,6 +32,8 @@ public class ArticleListController {
 	private ArticleService articleService;
 	@Autowired
 	private UserInfoService userInfoService;
+	@Autowired
+	private CommentService commentService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleListController.class);
 
@@ -60,6 +61,7 @@ public class ArticleListController {
 			tempArticleList.get(i).setArticle(temp);
 		}
 		articleVO.setArticleList(tempArticleList);
+		// session.getAttribute("validatedUserId");
 
 		return articleVO;
 	}
@@ -84,7 +86,6 @@ public class ArticleListController {
 	public String createNewArticle(Article newArticle, HttpSession session) {
 		newArticle.setCreate_date(new Date());
 
-		session.getAttribute("validatedUserId");
 		LOGGER.info(((UserInfo) session.getAttribute("validatedUserId")).getId() + "----------");
 		Integer tempUserId = ((UserInfo) session.getAttribute("validatedUserId")).getId();
 
@@ -148,6 +149,25 @@ public class ArticleListController {
 			return "articleList";
 		}
 
+	}
+
+	@RequestMapping(value = "/deleteSingleArticle", method = RequestMethod.POST)
+	@ResponseBody
+	public Boolean deleteSingleArticle(Integer deleteArticleId, Integer userId, HttpSession session) {
+
+		Integer tempUserId = ((UserInfo) session.getAttribute("validatedUserId")).getId();
+		LOGGER.info("tempUserId:" + tempUserId + " userId:" + userId);
+		if (tempUserId == userId) {
+			try {
+				articleService.deleteArticle(deleteArticleId);
+				commentService.deleteCommentsByArticleId(deleteArticleId);
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 }

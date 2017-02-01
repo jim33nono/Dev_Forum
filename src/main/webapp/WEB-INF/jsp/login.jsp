@@ -57,7 +57,7 @@
 				<div class="col-sm-10">
 					<input type="text" minlength="2" class="form-control" id="inputAccount" name="account"
 						placeholder="Account" required autofocus>
-					<form:errors path="account" cssclass="error" style="color:#F02D2D"></form:errors>
+<%-- 					<form:errors path="account" cssclass="error" style="color:#F02D2D"></form:errors> --%>
 				</div>
 			</div>
 			<div class="form-group">
@@ -65,7 +65,7 @@
 				<div class="col-sm-10">
 					<input type="password" minlength="2" class="form-control" id="inputPassword" name="password"
 						placeholder="Password" required>
-					<form:errors path="account" cssclass="error" style="color:#F02D2D"></form:errors>
+<%-- 					<form:errors path="account" cssclass="error" style="color:#F02D2D"></form:errors> --%>
 				</div>
 			</div>
 			<div class="form-group">

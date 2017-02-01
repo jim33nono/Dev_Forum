@@ -15,15 +15,20 @@
 
 <body>
 	<div class="container">
+	
 	<input class="btn btn-default" type="button" value="回登入頁面" onclick="location.href='login.do'">
 	<input class="btn btn-default" type="button" value="全文導覽" onclick="location.href='articleListController.do'">
 	<input class="btn btn-default" type="button" value="新增文章" onclick="location.href='createNewArticlePage.do'">
-		<h2>Article Page</h2>
-		<table id="tableArticleList" class="table table-striped" border="2" cellpadding="4" >
+		
+		<div class='divArticleList'>
+			<h2>Article Page</h2>
+			<table id="tableArticleList" class="table table-striped" border="2" cellpadding="4" >
 			
 		
-		</table>
+			</table>
+		</div>
 		
+		<div class='divCommentList'>
 		<h2>Comment Page</h2>
 		<table id="tableSingleArticle" class="table table-bordered" border="2" cellpadding="4" >
 			
@@ -34,7 +39,7 @@
 			
 		
 		</table>
-		
+		</div>
 	
 	</div>
 </body>
@@ -60,7 +65,8 @@
 	}
 	
 	function articleList(){
-		$('#tableArticleList').html('');
+		$('#divArticleList').html('')
+// 		$('.divCommentList').html('')
 		 $('#tableSingleArticle').html('')
 		 $('#tableCommentList').html('')
 		$.post('showArticleList.do').success(function(data){
@@ -72,6 +78,7 @@
 					"<th align='center'>內文</th>" +
 					"<th align='center'>建立者</th>" +
 					"<th align='center'>建立時間</th>" +
+					"<th>閱讀及回文</th>" +
 					"</tr>"
 					);
 			$.each(rowData, function(i, item){
@@ -96,7 +103,7 @@
 	}
 	
 	function showSingleArticle(){
-		 $('#tableArticleList').html('')
+		 $('.divArticleList').html('')
 		 $('#tableSingleArticle').html('')
 		 $('#tableCommentList').html('')
 		 var id = $(this).attr('data-id');
@@ -110,6 +117,7 @@
 					"<th align='center'>內文</th>" +
 					"<th align='center'>建立者</th>" +
 					"<th align='center'>建立時間</th>" +
+					"<th>編輯及刪除</th>" +
 					"</tr>"
 					);
 			$.each(rowData, function(i, item){
@@ -118,13 +126,26 @@
 						              "<td>" + rowData[i].title   + "</td>" +
 						              "<td>" + rowData[i].article    + "</td>" +
 						              "<td>" + rowData[i].user_name + "</td>" +
-						              "<td>" + date.toString() + "</td>" +				            
+						              "<td>" + date.toString() + "</td>" +	
+						              "<td><input class='btn btn-default btnEdit'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='編輯'  >" +
+						              	  "<input class='btn btn-default btnDelete'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='刪除'  ></td>" +
 						              "</tr>");
 			    i++;
 			})
+			
+			$('.btnEdit').bind({
+				click:editSingleArticle
+			})
+			
+			
+			$('.btnDelete').bind({
+				click:deleteSingleArticle
+			})
+			
 		 })
 		 
 		 showCommentList();
+		 
 		 function showCommentList(){
 			$.post("commentPageController.do",{
 					tempArticleId : id,
@@ -182,6 +203,27 @@
 			})
 		 }
 		 
+	}
+	
+	function deleteSingleArticle(){
+		var deleteArticleId = $(this).attr('data-id');
+		var userId = $(this).attr('user-id')
+		$.post("deleteSingleArticle.do",{
+			deleteArticleId : deleteArticleId,
+			userId : userId
+		}).success(function(data){
+			if(data == true){
+				alert("刪除成功")
+				window.location.href = 'articleListController.do'
+			}else{
+				alert("限此使用者操作")
+				window.location.href = 'articleListController.do'
+			}
+		})
+	}
+	
+	function editSingleArticle(){
+		
 	}
 	
 	

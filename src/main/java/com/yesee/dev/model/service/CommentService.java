@@ -34,6 +34,10 @@ public class CommentService {
 		commentDao.deleteComment(id);
 	}
 	
+	public void deleteCommentsByArticleId(Integer id){
+		commentDao.deleteCommentsByArticleId(id);
+	}
+	
 	public void addComment(Comment comment){
 		commentDao.addComment(comment);
 	}

@@ -127,8 +127,8 @@
 						              "<td>" + rowData[i].article    + "</td>" +
 						              "<td>" + rowData[i].user_name + "</td>" +
 						              "<td>" + date.toString() + "</td>" +	
-						              "<td><input class='btn btn-default btnEdit'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='編輯'  >" +
-						              	  "<input class='btn btn-default btnDelete'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='刪除'  ></td>" +
+						              "<td><div><input class='btn btn-default btnEdit'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='編輯'  >" +
+						              	  "<input class='btn btn-default btnDelete'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='刪除'  ></div></td>" +
 						              "</tr>");
 			    i++;
 			})
@@ -151,7 +151,7 @@
 					tempArticleId : id,
 			}).success(function(data){
 				rowComment = data['commentList'];
-				console.log(rowComment)
+// 				console.log(rowComment)
 				$("#tableCommentList").append(
 						"<tr>" +
 						"<th align='center'>回覆文章</th>" +
@@ -178,12 +178,13 @@
 			})
 		}
 		 
+		 //create comment 
 		 function showCommentDialog(){
 			 $.post("commentDialog.do",{
 					tempArticleId : id,
 			}).success(function(data){
 				rowComment = data['commentList'];
-					console.log(rowComment)
+// 					console.log(rowComment)
 					$("#tableCommentList").append(
 						"<tr>" +
 						"<th align='center'>回覆文章</th>" +
@@ -212,12 +213,26 @@
 			deleteArticleId : deleteArticleId,
 			userId : userId
 		}).success(function(data){
-			if(data == true){
+// 			 var xmlString;
+			    //xml to string
+			    //IE
+// 			    if (window.ActiveXObject){
+// 			        xmlString = data.xml;
+// 			    }
+			    // code for Mozilla, Firefox, Opera, etc.
+// 			    else{
+// 			        xmlString = (new XMLSerializer()).serializeToString(data);
+// 			    }
+// 			    console.log(xmlString+"")
+// 			    var tureOrFalse = data.getElementsByTagName("Boolean");
+// 			console.log(tureOrFalse+"")
+			console.log(data)
+			if(data){
 				alert("刪除成功")
 				window.location.href = 'articleListController.do'
 			}else{
 				alert("限此使用者操作")
-				window.location.href = 'articleListController.do'
+// 				window.location.href = 'articleListController.do'
 			}
 		})
 	}

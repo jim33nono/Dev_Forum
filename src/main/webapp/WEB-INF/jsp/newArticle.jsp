@@ -48,13 +48,33 @@
 		</form:form>
 		<br>
 		
-		<form method="POST" action="uploadFile.do" enctype="multipart/form-data">
-		File to upload: <input type="file" name="file">
+		<!--  form submit version -->
+<%-- 		<form method="POST" action="uploadFile.do" enctype="multipart/form-data"> --%>
+<!-- 		File to upload: <input type="file" name="file"> -->
  
-		Name: <input type="text" name="name">
+<!-- 		Name: <input type="text" name="name"> -->
  
-		<input type="submit" value="Upload"> Press here to upload the file!
-		</form>	
+<!-- 		<input type="submit" value="Upload"> Press here to upload the file! -->
+<%-- 		</form>	 --%>
+		
+		<br>
+		
+		<!-- JQuery版： -->
+        <form id="form_jquery" action="#" enctype="multipart/form-data">
+<!--             <input name="fileDescription" type="text" required/> -->
+            <input name="fileData" type="file"/>
+<!--             <input type="submit" onclick="submitForm_jquery(); return false;"/> -->
+        </form>
+        
+        <br>
+<!--        <div> -->
+<!--         	<input type="file" name="UploadFile" id="upload" multiple/>         -->
+<!--     	</div>   -->
+    	
+<%--     	<form name="form" action="" method="POST" enctype="multipart/form-data"> --%>
+<!--     		<input name="fileToUpload" type="file" id="fileToUpload"> -->
+<!--     		<input id="uploadfile" type="button" value="upload" onclick="ajaxFileUpload();return false;">  -->
+<%-- 		</form> --%>
 </div>
 </body>
 
@@ -82,20 +102,78 @@
 		$('#inputArticle').val('')
 	}
 	
+// 	function submitNewArticle(){
+// 		var inputTitle = $('#inputTitle').val();
+// 		var inputArticle = $('#inputArticle').val();
+// 		//file
+// 		var form_jquery = document.getElementById("form_jquery");
+// 	    var formData = new FormData(form_jquery);
+	    
+// 		$.post('createNewArticle.do',{
+// 			    title : inputTitle,
+// 				article : inputArticle,
+				
+// 			}).success(function(data){
+// 				clearText()
+// 				window.location.href = 'articleListController.do'
+// 		})
+		
+// 	}
+	
 	function submitNewArticle(){
 		var inputTitle = $('#inputTitle').val();
 		var inputArticle = $('#inputArticle').val();
-		console.log(inputTitle);
-		$.post('createNewArticle.do',{
-			    title : inputTitle,
-				article : inputArticle,
-				
-			}).success(function(data){
-				clearText();
+		
+		//file
+		var form_jquery = document.getElementById("form_jquery");
+	    var formData = new FormData(form_jquery);
+	    
+	    formData.append("title",inputTitle);
+	    formData.append("article",inputArticle);
+	    $.ajax({
+	        url: "createNewArticle.do",
+	        method: "POST",
+	      	data: formData,
+	        processData: false, // 告訴JQuery不要去處理發送的數據，不然會把data
+	                            //設置的物件轉換成查詢字符串以配合預設的application/x-www-form-urlencoded
+	                            
+	        contentType: false, // 告訴JQuery不要去設置Content-Type請求Header
+	                            //Header會自動適情況加上multipart/form-data
+	        success: function (response) {
+// 	            console.log("OK_upload");
+	            clearText()
 				window.location.href = 'articleListController.do'
-		})
+	        },
+	        error: function (jqXHR, textStatus, errorMessage) {
+	            console.log(errorMessage);
+	        }
+	    });
 		
 	}
+	
+	function submitForm_jquery() {
+	    var form_jquery = document.getElementById("form_jquery");
+	    var formData = new FormData(form_jquery);
+	    $.ajax({
+	        url: "uploadFileByAjax.do",
+	        method: "POST",
+	        data: formData,
+	        processData: false, // 告訴JQuery不要去處理發送的數據，不然會把data
+	                            //設置的物件轉換成查詢字符串以配合預設的application/x-www-form-urlencoded
+	                            //
+	        contentType: false, // 告訴JQuery不要去設置Content-Type請求Header，
+	                            //Header會自動適情況加上multipart/form-data
+	        success: function (response) {
+	            console.log("OK_upload");
+	        },
+	        error: function (jqXHR, textStatus, errorMessage) {
+	            console.log(errorMessage);
+	        }
+	    });
+	}
+	
+
+
 	
 </script>
 

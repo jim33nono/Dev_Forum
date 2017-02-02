@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.yesee.dev.model.ArticleVO;
 import com.yesee.dev.model.bean.Article;
@@ -83,20 +85,56 @@ public class ArticleListController {
 
 	@RequestMapping(value = "/createNewArticle", method = RequestMethod.POST)
 	@ResponseBody
-	public String createNewArticle(Article newArticle, HttpSession session) {
+	public void createNewArticle(@RequestParam("fileData") MultipartFile file, Article newArticle, HttpSession session) {
+		
 		newArticle.setCreate_date(new Date());
-
-		LOGGER.info(((UserInfo) session.getAttribute("validatedUserId")).getId() + "----------");
 		Integer tempUserId = ((UserInfo) session.getAttribute("validatedUserId")).getId();
-
 		if (tempUserId == null) { // 測試用
 			tempUserId = 1;
 		}
 		UserInfo tempUserInfoList = userInfoService.findById(tempUserId).get(0);
 		newArticle.setUser_id(tempUserInfoList.getId());
 		newArticle.setUser_name(tempUserInfoList.getUsername());
+		if (!file.isEmpty()) {
+			try {
+				byte[] bytes = file.getBytes(); //Binary usage
+				LOGGER.info(bytes.toString() + "++++++++++++++");
+
+				String filePathAndName = file.getOriginalFilename();
+
+				// Creating the directory to store file
+				String rootPath = System.getProperty("user.home");
+				File dir = new File(rootPath);
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
+
+				// MultipartFile transferTo server file用法
+				String tempPath = dir.getAbsolutePath() + File.separator + filePathAndName;
+				File serverFile = new File(tempPath);
+				file.transferTo(serverFile);
+				
+				// // Create the traditional file output on server
+				// File serverFile = new File(dir.getAbsolutePath() +
+				// File.separator + filePathAndName);
+				// BufferedOutputStream stream = new BufferedOutputStream(new
+				// FileOutputStream(serverFile));
+				// stream.write(bytes);
+				// stream.close();
+
+				newArticle.setUploadData(tempPath);
+				LOGGER.info("Server File Location= " + tempPath);
+
+			} catch (Exception e) {
+				LOGGER.error("err: {}", e);
+				// return "You failed to upload " + name + " => " +
+				// e.getMessage();
+//				return "";
+			}
+		}
+		
 		articleService.addArticle(newArticle);
-		return "";
+//		return "";
 	}
 
 	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
@@ -111,7 +149,9 @@ public class ArticleListController {
 				String filePathAndName = file.getOriginalFilename();
 
 				// Creating the directory to store file
-				String rootPath = "C:\\upload";
+//				String rootPath = "C:\\upload";
+				String rootPath = System.getProperty("user.home");
+//				LOGGER.info(rootPath+"+++++++++++++++");
 				File dir = new File(rootPath);
 				if (!dir.exists()) {
 					dir.mkdirs();
@@ -150,8 +190,62 @@ public class ArticleListController {
 		}
 
 	}
+	
+	@RequestMapping(value = "/uploadFileByAjax", method = RequestMethod.POST)
+	public String uploadFileHandlerByAjax(@RequestParam("fileData") MultipartFile data, MultipartHttpServletRequest request, HttpServletResponse response,
+			HttpSession session) {
 
-	@RequestMapping(value = "/deleteSingleArticle", method = RequestMethod.POST)
+		if (!data.isEmpty()) {
+			try {
+				byte[] bytes = data.getBytes();
+				 LOGGER.info(bytes.toString() + "++++++++++++");
+
+				String filePathAndName = data.getOriginalFilename();
+
+				// Creating the directory to store file
+//				String rootPath = "C:\\upload";
+				String rootPath = System.getProperty("user.home");
+				LOGGER.info(rootPath+"+++++++++++++++");
+				File dir = new File(rootPath);
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
+
+				// MultipartFile transferTo用法
+				String tempPath = dir.getAbsolutePath() + File.separator + filePathAndName;
+				File serverFile = new File(tempPath);
+				data.transferTo(serverFile);
+
+				// // Create the file on server
+				// File serverFile = new File(dir.getAbsolutePath() +
+				// File.separator + filePathAndName);
+				// BufferedOutputStream stream = new BufferedOutputStream(new
+				// FileOutputStream(serverFile));
+				// stream.write(bytes);
+				// stream.close();
+				Article article = new Article();
+				article.setUploadData(tempPath);
+				articleService.uploadFile(article);
+				LOGGER.info("Server File Location= " + tempPath);
+
+				// return "You successfully uploaded file=" + name;
+
+				return "articleList";
+			} catch (Exception e) {
+				LOGGER.error("err: {}", e);
+				// return "You failed to upload " + name + " => " +
+				// e.getMessage();
+				return "articleList";
+			}
+		} else {
+			// return "You failed to upload " + name
+			// + " because the file was empty.";
+			return "articleList";
+		}
+
+	}
+
+	@RequestMapping(value = "/deleteSingleArticle", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public Boolean deleteSingleArticle(Integer deleteArticleId, Integer userId, HttpSession session) {
 

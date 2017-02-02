@@ -30,16 +30,20 @@ public class UserInfo implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Size(min = 3, max = 30, message = "Min size 3 and max size 30")
+	@NotBlank(message = "Password blank")
 	@Column(name = "ACCOUNT")
 	private String account;
 
-	@NotBlank(message = "Password blank")
+	
+	@Size(min = 5, message = "Min size 5")
 	@Column(name = "PASSWORD")
 	private String password;
 
 	@Column(name = "USER_NAME")
 	private String username;
+	
+	@Column(name = "EMAIL")
+	private String email;
 
 	@Column(name = "CREATE_DATE")
 	private Date create_date;
@@ -79,6 +83,14 @@ public class UserInfo implements Serializable {
 		this.username = username;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 	public Date getCreateDate() {
 		return create_date;
 	}
@@ -86,15 +98,15 @@ public class UserInfo implements Serializable {
 	public void setCreateDate(Date create_date) {
 		this.create_date = create_date;
 	}
-
+	
 	public String getAdmin() {
 		return admin;
 	}
-
+	
 	public void setAdmin(String admin) {
 		this.admin = admin;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "UserInfo [id=" + id + ", account=" + account + ", password=" + password + ", username=" + username

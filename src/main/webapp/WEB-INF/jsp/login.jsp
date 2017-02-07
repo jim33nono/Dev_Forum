@@ -63,19 +63,12 @@
 			<div class="form-group">
 				<label for="inputPassword" class="col-sm-2 control-label">Password:</label>
 				<div class="col-sm-10">
-					<input type="password" minlength="2" class="form-control" id="inputPassword" name="password"
+					<input type="password" minlength="5" class="form-control" id="inputPassword" name="password"
 						placeholder="Password" required>
 <%-- 					<form:errors path="account" cssclass="error" style="color:#F02D2D"></form:errors> --%>
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<div class="checkbox">
-						<label> <input type="checkbox"> Remember me
-						</label>
-					</div>
-				</div>
-			</div>
+			
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<button type="submit" class="btn btn-default" id="btnSignIn">Sign in</button>

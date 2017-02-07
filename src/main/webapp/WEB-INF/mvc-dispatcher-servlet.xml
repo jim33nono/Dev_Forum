@@ -46,6 +46,7 @@
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
 			</props>
 		</property>
 
@@ -98,4 +99,6 @@
 	
 	<!-- 相当于注册了DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter两个bean，配置一些messageconverter。即解决了@Controller注解的使用前提配置 -->
 	<mvc:annotation-driven />
+	<mvc:resources location="/js/" mapping="/js/**"  cache-period="31556926"/>
+	
 </beans>

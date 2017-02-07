@@ -28,7 +28,6 @@ import com.yesee.dev.model.service.UserInfoService;
 public class LoginController {
 
 	// public static Integer tempUserId;
-
 	@Autowired
 	private UserInfoService userInfoService;
 
@@ -44,10 +43,10 @@ public class LoginController {
 	@RequestMapping(value = "/tryLogin", method = RequestMethod.POST)
 	public String login(@Validated UserInfo userInfo, BindingResult bindingResult, HttpSession session) {
 		boolean loginOrNot = userInfoService.checkUser(userInfo.getAccount(), userInfo.getPassword());
+		
 		Integer tempUserId = userInfoService.getUserId(userInfo.getAccount(), userInfo.getPassword());
-
 		session.setAttribute("validatedUserId", userInfoService.findById(tempUserId).get(0));
-		// LOGGER.info(((UserInfo)session.getAttribute("test")).getAccount()+"----------");
+		
 		if (loginOrNot) {
 			if (bindingResult.hasErrors()) {
 				LOGGER.info(userInfo.getAccount() + "++" + userInfo.getPassword()
@@ -69,6 +68,8 @@ public class LoginController {
 			return "login";
 		}
 	}
+	
+	
 
 	
 

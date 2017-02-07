@@ -31,6 +31,7 @@ public class UserInfoDao {
 		query.setParameter(0, account);
 		@SuppressWarnings("unchecked")
 		List<UserInfo> result = query.list();
+		
 		return result;
 	}
 	

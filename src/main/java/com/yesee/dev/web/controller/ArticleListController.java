@@ -263,5 +263,22 @@ public class ArticleListController {
 			return false;
 		}
 	}
+	
+	@RequestMapping(value = "/editSingleArticle", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public Article editSingleArticle(Integer editArticleId, Integer userId, HttpSession session){
+		
+		Integer tempUserId = ((UserInfo) session.getAttribute("validatedUserId")).getId();
+		LOGGER.info("tempUserId:" + tempUserId + " userId:" + userId);
+		if (tempUserId == userId) {
+			
+			articleService.findById(editArticleId);
+			
+			return articleService.findById(editArticleId).get(0);
+		} else {
+			return null;
+		}
+		
+	}
 
 }

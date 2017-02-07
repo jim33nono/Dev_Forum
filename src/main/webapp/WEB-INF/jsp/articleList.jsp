@@ -40,6 +40,10 @@
 		
 		</table>
 		</div>
+		
+		<form:form class="form-horizontal editArticle">
+		
+		</form:form>
 	
 	</div>
 </body>
@@ -90,7 +94,7 @@
 						              "<td>" + date.toString() + "</td>" +				            
 // 									  "<td><a class='btn btn-default' href='showSingleArticle/" + rowData[i].id + ".do' role='button'>閱讀並回文</a></td>" +
 									  "<td><input class='btn btn-default btnRead'  type='button' data-id='"+ rowData[i].id + "' value='閱讀及回文'  ></td>" +
-									  "<td><input class='btn btn-default btnEdit'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='編輯'  ></td>" +
+// 									  "<td><input class='btn btn-default btnEdit'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='編輯'  ></td>" +
 						              "</tr>");
 				i++;
 			})
@@ -127,8 +131,8 @@
 						              "<td>" + rowData[i].article    + "</td>" +
 						              "<td>" + rowData[i].user_name + "</td>" +
 						              "<td>" + date.toString() + "</td>" +	
-						              "<td><div><input class='btn btn-default btnEdit'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='編輯'  >" +
-						              	  "<input class='btn btn-default btnDelete'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='刪除'  ></div></td>" +
+						              "<td><div><table><tr><td><input class='btn btn-default btnEdit'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='編輯'></td></tr>" +
+						              	  "<tr><td><input class='btn btn-default btnDelete'  type='button' data-id='"+ rowData[i].id + "'user-id='" + rowData[i].user_id+ "' value='刪除'></td></tr></table></div></td>" +
 						              "</tr>");
 			    i++;
 			})
@@ -207,37 +211,34 @@
 	}
 	
 	function deleteSingleArticle(){
-		var deleteArticleId = $(this).attr('data-id');
+		var deleteArticleId = $(this).attr('data-id')
 		var userId = $(this).attr('user-id')
 		$.post("deleteSingleArticle.do",{
 			deleteArticleId : deleteArticleId,
 			userId : userId
 		}).success(function(data){
-// 			 var xmlString;
-			    //xml to string
-			    //IE
-// 			    if (window.ActiveXObject){
-// 			        xmlString = data.xml;
-// 			    }
-			    // code for Mozilla, Firefox, Opera, etc.
-// 			    else{
-// 			        xmlString = (new XMLSerializer()).serializeToString(data);
-// 			    }
-// 			    console.log(xmlString+"")
-// 			    var tureOrFalse = data.getElementsByTagName("Boolean");
-// 			console.log(tureOrFalse+"")
-			console.log(data)
 			if(data){
 				alert("刪除成功")
 				window.location.href = 'articleListController.do'
 			}else{
 				alert("限此使用者操作")
-// 				window.location.href = 'articleListController.do'
 			}
 		})
 	}
 	
 	function editSingleArticle(){
+		var editArticleId = $(this).attr('data-id')
+		var userId = $(this).attr('user-id')
+		$.post("editSingleArticle.do", {
+			editArticleId : editArticleId,
+			userId : userId
+		}).success(function(data){
+			 $('.divArticleList').html('')
+			 $('#tableSingleArticle').html('')
+			 $('#tableCommentList').html('')
+			 $('.editArticle').append
+			
+		})
 		
 	}
 	

@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -10,6 +11,9 @@
 <meta name = "viewport" content = "width=device-width, initial-scale=1">
 <title>Login Page</title>
 <link rel="stylesheet" href="css/bootstrap.min.css">
+
+
+
 
 </head>
 <body>
@@ -21,17 +25,17 @@
 		<form:form class="form-horizontal">
 			<fieldset>
 			<legend>新增文章</legend>
-			<div class="form-group">
-				<label  class="col-sm-2 control-label">標題</label>
+			<div class='form-group'>
+				<label  class='col-sm-2 control-label'>標題</label>
 				<div class="col-sm-10">
 					<input minlength="5" maxlength="100" class="form-control" id="inputTitle" 
 						placeholder="標題" required autofocus>
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="inputArticle1" class="col-sm-2 control-label">標題</label>
+				<label for="inputArticle1" class="col-sm-2 control-label">文章</label>
 				<div class="col-sm-10">
-					<textarea id='inputArticle' minlength="5" maxlength="250" class="form-control" rows="5"  placeholder="輸入回覆文章" required>
+					<textarea id='inputArticle' minlength="10"  class="form-control" rows="5"  placeholder="輸入發表文章" required>
 			
 					</textarea>
 				</div>
@@ -81,7 +85,13 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="js/jquery.validate.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<%-- <spring:url value="/resources/js/internetSetting.js" var="internetSettingJs" /> --%>
+<%-- <script src="${internetSettingJs}"></script> --%>
+<script src="<c:url value="/resources/js/internetSetting.js" />"></script>
 <script type="text/javascript">
+
+
+
 	$(document).ready(function() {
 		bindEvents();
 		clearText();
@@ -95,6 +105,11 @@
 		$('.btnClear').bind({
 			click:clearText
 		})
+		
+		$('.btnTest').bind({
+			click:submitInternetSetting
+		})
+
 	}
 	
 	function clearText(){

@@ -99,6 +99,15 @@
 	
 	<!-- 相当于注册了DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter两个bean，配置一些messageconverter。即解决了@Controller注解的使用前提配置 -->
 	<mvc:annotation-driven />
+	
+	<!-- js resources path -->
 	<mvc:resources location="/js/" mapping="/js/**"  cache-period="31556926"/>
+	<mvc:resources mapping="/html/**" location="/WEB-INF/html"/>  
+	
+<!-- 	<bean id = "htmlView" -->
+<!-- 	    class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
+<!-- 	      <property name="prefix" value="WEB-INF/html/" /> -->
+<!-- 	      <property name="suffix" value=".html" /> -->
+<!--     </bean> -->
 	
 </beans>

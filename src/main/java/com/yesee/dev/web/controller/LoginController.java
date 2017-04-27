@@ -33,19 +33,17 @@ public class LoginController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
-	@RequestMapping(value = { "/login" })
-	// @RequestMapping("/")
+//	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
+	 @RequestMapping("/login")
 	public String login(UserInfo userInfo) {
 		LOGGER.info("Connected Login Page Successfully");
 		return "login";
+//		return "entry";
 	}
 
 	@RequestMapping(value = "/tryLogin", method = RequestMethod.POST)
 	public String login(@Validated UserInfo userInfo, BindingResult bindingResult, HttpSession session) {
 		boolean loginOrNot = userInfoService.checkUser(userInfo.getAccount(), userInfo.getPassword());
-		
-		Integer tempUserId = userInfoService.getUserId(userInfo.getAccount(), userInfo.getPassword());
-		session.setAttribute("validatedUserId", userInfoService.findById(tempUserId).get(0));
 		
 		if (loginOrNot) {
 			if (bindingResult.hasErrors()) {
@@ -53,8 +51,12 @@ public class LoginController {
 						+ " - Failed login because of validation limit!");
 				return "login";
 			}
+			Integer tempUserId = userInfoService.getUserId(userInfo.getAccount(), userInfo.getPassword());
+			session.setAttribute("validatedUserId", userInfoService.findById(tempUserId).get(0));
 			LOGGER.info(userInfo.getAccount() + " - Login Successfully");
 			return "redirect:/articleListController.do";
+//			return "html/entry";
+			
 
 			// login success
 		} else {

@@ -41,6 +41,7 @@ public class UserInfoDao {
 		query.setParameter(1, password);
 		@SuppressWarnings("unchecked")
 		List<UserInfo> result = query.list();
+		
 		return result.get(0).getId();
 	}
 
